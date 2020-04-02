@@ -28,7 +28,7 @@ workflows:
       # Note: This is a job which is defined above and not part of the Orb
       - checkout_code
 
-      - install_deps
+      - install_deps:
         requires:
           - checkout_code
 
