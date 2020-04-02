@@ -14,11 +14,6 @@ jobs:
       - persist_to_workspace:
           root: .
           paths: .
-  install_deps:
-    executor: rn/linux_js
-    steps:
-      - attach_workspace:
-            at: .
       - rn/yarn_install
 
 workflows:
@@ -28,10 +23,6 @@ workflows:
       # Note: This is a job which is defined above and not part of the Orb
       - checkout_code
 
-      - install_deps:
-        requires:
-          - checkout_code
-
       # Build and test the Android app in release mode
       # Note: We split these into seperate jobs because we can build the Android app on a Linux machine and preserve the expensive MacOS executor minutes for when it's required
       - rn/android_build:
@@ -39,7 +30,7 @@ workflows:
           project_path: "android"
           build_type: release
           requires:
-            - install_deps
+            - checkout_code
 
       - rn/android_test:
           detox_configuration: "android.emu.release"
